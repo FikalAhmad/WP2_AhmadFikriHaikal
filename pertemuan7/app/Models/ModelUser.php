@@ -44,29 +44,25 @@ class ModelUser extends Model
 
     public function simpanData($data = null) 
     { 
-        return $this->insert('user', $data);
+        $this->insert($data);
     } 
  
-    public function cekData($where = null) 
+    public function cekData($where) 
     { 
-        return $this->where($where)->findAll(); 
+        return $this->where('email',$where)->first(); 
     } 
     
     public function getUserWhere($where = null) 
     { 
-        return $this->where($where)->findAll(); 
+        return $this->where($where); 
     } 
  
     public function cekUserAccess($where = null) 
     { 
-        $db = \Config\Database::connect();
-        $builder = $db->table('access_menu');
-        return $builder->where($where)->get()->getResult();
+        return $this->table('access-menu')->where($where);
     } 
     public function getUserLimit() 
     { 
-        $db = \Config\Database::connect();
-        $builder = $db->table('user');
-        return $builder->limit(10, 0)->get()->getResult();
+        return $this->limit(10,0);
     } 
 } 
