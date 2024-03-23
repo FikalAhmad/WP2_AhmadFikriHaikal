@@ -64,5 +64,6 @@ class ModelUser extends Model
     public function getUserLimit() 
     { 
         return $this->limit(10,0);
+        
     } 
 } 
