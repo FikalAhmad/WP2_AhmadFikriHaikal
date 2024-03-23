@@ -59,11 +59,10 @@ class ModelUser extends Model
  
     public function cekUserAccess($where = null) 
     { 
-        return $this->table('access-menu')->where($where);
+        return $this->select('*')->table('access-menu')->where($where);
     } 
     public function getUserLimit() 
     { 
-        return $this->limit(10,0);
-        
+        return $this->limit(10)->findAll();
     } 
 } 
