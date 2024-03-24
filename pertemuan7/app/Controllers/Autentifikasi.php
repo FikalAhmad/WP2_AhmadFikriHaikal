@@ -11,7 +11,7 @@ class Autentifikasi extends BaseController
         $session = \Config\Services::session();
         // Check if user is already logged in
         if ($session->get('email')) {
-            return redirect()->to('user');
+            return redirect()->to('admin');
         }
 
         $form_validation = \Config\Services::validation();
@@ -47,7 +47,6 @@ class Autentifikasi extends BaseController
             return $this->_login();
         }
     }
-    
 
     private function _login()
     {
