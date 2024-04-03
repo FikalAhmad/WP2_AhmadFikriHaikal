@@ -19,10 +19,6 @@ class DataSiswa extends BaseController
           'required'=>'Nama Siswa Harus Diisi',
           'min_length'=>'Kode terlalu pendek'
         ]);
-        // $form_validation->setRule('nama', 'Nama Matakuliah','required|min_length[3]', [
-        //   'required'=>'Nama Matakuliah Harus Diisi',
-        //   'min_length'=>'Nama terlalu pendek'
-        // ]);
         if($form_validation->withRequest($request)->run() != true){
           echo view('dlemas-form');
         } else {

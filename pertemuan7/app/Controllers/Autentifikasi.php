@@ -5,18 +5,24 @@ namespace App\Controllers;
 use App\Models\ModelUser;
 
 class Autentifikasi extends BaseController
-{
+{   
+    protected $form_validation;
+    protected $request;
+    protected $ModelUser;
+
+    public function __construct() {
+        $this->form_validation = \Config\Services::validation();
+        $this->request = \Config\Services::request();
+        $this->ModelUser = new ModelUser();
+    }
     public function index()
     {
-        $session = \Config\Services::session();
-        // Check if user is already logged in
-        if ($session->get('email')) {
-            return redirect()->to('admin');
+        if (session()->get('email')) {
+            return redirect()->to('user');
         }
 
-        $form_validation = \Config\Services::validation();
 
-        $form_validation->setRules([
+        $this->form_validation->setRules([
             'email' => [
               'label' => 'Alamat Email',
               'rules' => 'required|valid_email',
@@ -32,10 +38,10 @@ class Autentifikasi extends BaseController
                   'required' => 'Password harus diisi'
                   ]
                 ],
-                ]
+            ]
         );
         
-        if (!$form_validation->withRequest($this->request)->run()) {
+        if (!$this->form_validation->withRequest($this->request)->run()) {
             $data['judul'] = 'Login';
             $data['user'] = '';
             
@@ -50,12 +56,10 @@ class Autentifikasi extends BaseController
 
     private function _login()
     {
-        $session = \Config\Services::session();
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password'); 
 
-        $modelUser = new ModelUser();
-        $user = $modelUser->cekData($email);
+        $user = $this->ModelUser->cekData(['email' => $email])->first();
         
         if ($user) {
             if ($user['is_active'] == 1) {
@@ -65,26 +69,26 @@ class Autentifikasi extends BaseController
                         'role_id' => $user['role_id']
                     ];
 
-                    $session->set($data);
+                    session()->set($data);
 
                     if ($user['role_id'] == 1) {
                         return redirect()->to('admin');
                     } else {
                         if ($user['image'] == 'default.jpg') {
-                            $session->setFlashdata('pesan', '<div class="alert alert-info alert-message" role="alert">Silahkan Ubah Profile Anda untuk Ubah Photo Profil</div>');
+                            session()->setFlashdata('pesan', '<div class="alert alert-info alert-message" role="alert">Silahkan Ubah Profile Anda untuk Ubah Photo Profil</div>');
                         }
                         return redirect()->to('user');
                     }
                 } else {
-                    $session->setFlashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Password salah!!</div>');
+                    session()->setFlashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Password salah!!</div>');
                     return redirect()->to('autentifikasi');
                 }
             } else {
-                $session->setFlashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">User belum diaktifasi!!</div>');
+                session()->setFlashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">User belum diaktifasi!!</div>');
                 return redirect()->to('autentifikasi');
             }
         } else {
-            $session->setFlashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Email tidak terdaftar!!</div>');
+            session()->setFlashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Email tidak terdaftar!!</div>');
             return redirect()->to('autentifikasi');
         }
     }
