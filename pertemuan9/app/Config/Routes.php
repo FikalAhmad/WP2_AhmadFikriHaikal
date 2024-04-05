@@ -8,11 +8,13 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Autentifikasi::index');
 $routes->get('/autentifikasi/blok', 'Autentifikasi::blok');
 $routes->get('/autentifikasi/gagal', 'Autentifikasi::gagal');
-$routes->get('/registrasi', 'Autentifikasi::registrasi');
+$routes->get('/autentifikasi/registrasi', 'Autentifikasi::registrasi');
 $routes->get('/user', 'User::index');
 $routes->get('/user/ubahprofil', 'User::ubahProfil');
 $routes->get('/admin', 'Admin::index');
+$routes->get('/autentifikasi/logout', 'Autentifikasi::logout');
 
 $routes->post('/autentifikasi', 'Autentifikasi::index');
 $routes->post('/user/ubahprofil', 'User::ubahProfil');
-$routes->post('/registrasi', 'Autentifikasi::registrasi');
+$routes->post('/autentifikasi/registrasi', 'Autentifikasi::registrasi');
+$routes->post('/autentifikasi/logout', 'Autentifikasi::logout');
